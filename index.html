@@ -1,60 +1,33 @@
+<!-- index.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My Vibrant Website</title>
-    <style>
-        /* Add your custom CSS styles here */
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f9f9f9;
-            color: #333;
-            margin: 0;
-            padding: 0;
-        }
-        header {
-            background-color: #ffcc00;
-            padding: 20px;
-            text-align: center;
-        }
-        h1 {
-            font-size: 2rem;
-            margin: 0;
-            color: #333;
-        }
-        .content {
-            max-width: 800px;
-            margin: 0 auto;
-            padding: 20px;
-            background-color: #fff;
-            border-radius: 5px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        }
-        footer {
-            text-align: center;
-            padding: 10px;
-            background-color: #333;
-            color: #fff;
-        }
-    </style>
+<meta charset="UTF-8">
+<title>Chat Room</title>
+<script src="/socket.io/socket.io.js"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const socket = io();
+
+    // Send message to server
+    document.querySelector('#send').onclick = () => {
+      const message = document.querySelector('#message').value;
+      socket.emit('chat message', message);
+      document.querySelector('#message').value = '';
+    };
+
+    // Receive message from server
+    socket.on('chat message', (msg) => {
+      const item = document.createElement('li');
+      item.textContent = msg;
+      document.querySelector('#messages').appendChild(item);
+      window.scrollTo(0, document.body.scrollHeight);
+    });
+  });
+</script>
 </head>
 <body>
-    <header>
-        <h1>Welcome to My Vibrant Website</h1>
-    </header>
-    <div class="content">
-        <h2>About Me</h2>
-        <p>I'm passionate about web development and creating beautiful websites.</p>
-        <h2>My Projects</h2>
-        <ul>
-            <li><a href="#">Project 1</a></li>
-            <li><a href="#">Project 2</a></li>
-            <li><a href="#">Project 3</a></li>
-        </ul>
-    </div>
-    <footer>
-        &copy; 2024 My Vibrant Website
-    </footer>
+<ul id="messages"></ul>
+<input id="message" autocomplete="off" /><button id="send">Send</button>
 </body>
 </html>
